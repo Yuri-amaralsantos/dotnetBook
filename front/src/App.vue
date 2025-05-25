@@ -8,6 +8,7 @@
       <router-link v-if="isAuthenticated" to="/books">Livros</router-link> 
       <router-link v-if="isAuthenticated" to="/mybooks">Meus Livros</router-link>
       <router-link v-if="isAuthenticated && isAdmin" to="/admin/books">Gerenciar Livros</router-link> 
+      <spam v-if="isAuthenticated">Olá, {{ userName }}!</spam>
       <button v-if="isAuthenticated" @click="logout">Sair</button>
     </nav>
 
@@ -21,10 +22,11 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 
 const router = useRouter()
-const auth = useAuth()
+const {auth, } = useAuth()
 
 const isAuthenticated = computed(() => auth.isAuthenticated.value)
 const isAdmin = computed(() => auth.isAdmin.value)
+const userName = computed(() => auth.userName.value) 
 
 const logout = () => {
   auth.clearToken()

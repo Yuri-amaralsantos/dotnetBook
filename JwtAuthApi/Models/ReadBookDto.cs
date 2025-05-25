@@ -16,8 +16,9 @@ namespace JwtAuthApi.DTOs
         public int BookId { get; set; } // ✅ Adicionado
         public int Rating { get; set; }
         public string Comment { get; set; } = string.Empty;
-        public string UserName { get; set; } = string.Empty; 
+        public int UserId { get; set; }
         public string BookTitle { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
 
     }
 }

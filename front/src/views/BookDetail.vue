@@ -1,11 +1,7 @@
 <template>
   <div v-if="book">
     <h2>{{ book.title }}</h2>
-    <img
-      :src="book.imageUrl || '/test.jpg'"
-      alt="Capa do livro"
-      style="width: 200px; height: auto;"
-    />
+    <img :src="book.imageUrl || '/test.jpg'" alt="Capa do livro" style="width: 200px; height: auto;" />
     <p><strong>Autor:</strong> {{ book.author }}</p>
     <p><strong>Ano:</strong> {{ book.year }}</p>
 
@@ -29,8 +25,10 @@
           <p><strong>Usuário:</strong> {{ review.userName }}</p>
           <p><strong>Nota:</strong> {{ review.rating }}/5</p>
           <p><strong>Comentário:</strong> {{ review.comment }}</p>
-          <p>{{review.userId}}{{user}}</p>
-          <button v-if="user && review.userId === user.id" @click="removeReadBook(review.id)">
+          <button
+            v-if="userId && (review.userId === userId || isAdmin)"
+            @click="removeReadBook(review.id)"
+          >
             Remover
           </button>
         </li>
@@ -45,38 +43,27 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import API from '../services/api'
 import useAuth from '../components/useAuth'
-import { watch } from 'vue'
 
 const route = useRoute()
 const book = ref(null)
 const userReview = ref(null)
 const rating = ref(0)
 const comment = ref('')
-const { token, user } = useAuth()
+const { token, userId, isAdmin } = useAuth()
 const headers = { Authorization: `Bearer ${token.value}` }
-
-watch(user, (newVal) => console.log('Usuário logado:', newVal))
-watch(book, (newVal) => console.log('Livro:', newVal))
-watch(userReview, (newVal) => console.log('UserReview:', newVal))
-
 
 async function fetchBookDetails() {
   const res = await API.get(`/books/${route.params.id}`)
-  console.log('Livro:', res.data)
   book.value = res.data
-  console.log('Usuário logado:', user);
-  console.log('Reviews do livro:', book.value.reviews);
 
   try {
-    const reviewRes = await API.get(`/readbooks/book/${route.params.id}`, { headers })
-    console.log('Reviews do usuário para o livro:', reviewRes.data)
-    userReview.value = reviewRes.data.length > 0 ? reviewRes.data[reviewRes.data.length - 1] : null
+    const reviewRes = await API.get('/readbooks', { headers })
+    userReview.value = reviewRes.data.find(r => r.bookId === Number(route.params.id)) || null
   } catch (err) {
     if (err.response?.status !== 404) console.error(err)
     userReview.value = null
   }
 }
-
 
 async function submitReview() {
   try {
@@ -95,11 +82,12 @@ async function submitReview() {
 }
 
 async function removeReadBook(id) {
+console.log("Removendo review com id =", id, "do usuário =", userId.value)
   if (!confirm('Tem certeza que deseja remover este comentário?')) return
 
   try {
     await API.delete(`/readbooks/${id}`, { headers })
-    readBooks.value = (await API.get('/readbooks', { headers })).data
+    await fetchBookDetails()
   } catch (error) {
     console.error('Erro ao remover livro lido:', error.response?.data || error.message)
     alert('Erro ao remover livro.')

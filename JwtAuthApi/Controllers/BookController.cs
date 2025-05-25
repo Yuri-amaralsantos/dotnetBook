@@ -42,9 +42,11 @@ namespace JwtAuthApi.Controllers
                 Year = book.Year,
                 Reviews = book.Reviews.Select(r => new ReadBookDto
                 {
+                    Id = r.Id,
                     BookId = r.BookId,
                     Rating = r.Rating,
                     Comment = r.Comment,
+                    UserId = r.User.Id,
                     UserName = r.User.Username
                 }).ToList()
             };

@@ -147,3 +147,4 @@ C:\Users\w10\Documents\projects\meu\dotnetBook\JwtAuthApi\obj\Debug\net9.0\refin
 C:\Users\w10\Documents\projects\meu\dotnetBook\JwtAuthApi\obj\Debug\net9.0\JwtAuthApi.pdb
 C:\Users\w10\Documents\projects\meu\dotnetBook\JwtAuthApi\obj\Debug\net9.0\JwtAuthApi.genruntimeconfig.cache
 C:\Users\w10\Documents\projects\meu\dotnetBook\JwtAuthApi\obj\Debug\net9.0\ref\JwtAuthApi.dll
+C:\Users\w10\Documents\projects\meu\dotnetBook\JwtAuthApi\obj\Debug\net9.0\JwtAuthApi.sourcelink.json

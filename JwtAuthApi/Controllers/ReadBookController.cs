@@ -29,7 +29,7 @@ public class ReadBooksController : ControllerBase
                 BookId = rb.BookId,
                 Rating = rb.Rating,
                 Comment = rb.Comment,
-                UserName = rb.User.Username,
+                UserId = rb.UserId,
                 BookTitle = rb.Book.Title
             })
             .ToListAsync();
@@ -46,6 +46,7 @@ public class ReadBooksController : ControllerBase
 
         var readBook = new ReadBook
         {
+            
             UserId = userId,
             BookId = dto.BookId,
             Rating = dto.Rating,
@@ -63,11 +64,15 @@ public class ReadBooksController : ControllerBase
     public async Task<IActionResult> DeleteReadBook(int id)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var userIsAdmin = User.IsInRole("Admin");
 
-        var readBook = await _context.ReadBooks.FirstOrDefaultAsync(rb => rb.Id == id && rb.UserId == userId);
+        var readBook = await _context.ReadBooks.FirstOrDefaultAsync(rb => rb.Id == id);
 
         if (readBook == null)
-            return NotFound("Livro lido não encontrado ou não pertence a este usuário.");
+            return NotFound("Livro lido não encontrado.");
+
+        if (!userIsAdmin && readBook.UserId != userId)
+            return Forbid("Você não tem permissão para remover esta review.");
 
         _context.ReadBooks.Remove(readBook);
         await _context.SaveChangesAsync();
@@ -91,7 +96,7 @@ public class ReadBooksController : ControllerBase
                 BookId = rb.BookId,
                 Rating = rb.Rating,
                 Comment = rb.Comment,
-                UserName = rb.User.Username,
+                UserId = rb.UserId,
                 BookTitle = rb.Book.Title
             })
             .ToListAsync();
