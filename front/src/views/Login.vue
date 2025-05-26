@@ -6,7 +6,7 @@
       <input v-model="password" type="password" placeholder="Senha" required />
       <button type="submit">Entrar</button>
     </form>
-    <p>{{ message }}</p>
+    <p v-if="message">{{ message }}</p>
   </div>
 </template>
 
@@ -34,7 +34,15 @@ const login = async () => {
     message.value = 'Login realizado!'
     router.push('/books')
   } catch (error) {
+    console.error('Erro no login:', error.response?.data || error.message)
     message.value = 'Usuário ou senha inválidos'
   }
 }
 </script>
+
+<style scoped>
+input {
+  max-width:400px;
+  margin: 20px;
+}
+</style>

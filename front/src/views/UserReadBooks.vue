@@ -82,3 +82,33 @@ async function removeReadBook(id) {
 
 </script>
 
+<style scoped>
+ul li {
+  position: relative;
+  padding-right: 80px; /* Espaço para o botão no canto */
+  margin-bottom: 20px;
+  background: #1e1e1e;
+  border-radius: 6px;
+  padding: 10px 15px;
+  color: white;
+}
+
+ul li button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #c62828;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+ul li button:hover {
+  background-color: #a91e1e;
+}
+
+</style>

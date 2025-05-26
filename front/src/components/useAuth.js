@@ -68,6 +68,7 @@ export default function useAuth() {
         userRole,
         isAuthenticated,
         isAdmin,
+        setToken,
         auth: {
             token,
             userId,

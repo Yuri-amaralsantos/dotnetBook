@@ -1,36 +1,143 @@
 <template>
-  <div>
+  <div class="container">
     <h2>Gerenciar Livros</h2>
 
-    <form @submit.prevent="createBook">
-      <input v-model="newBook.title" placeholder="Título" required />
-      <input v-model="newBook.author" placeholder="Autor" required />
-      <input v-model.number="newBook.year" placeholder="Ano" required />
-      <input v-model="newBook.imageUrl" placeholder="Link da imagem (opcional)" />
-      <button type="submit">Adicionar</button>
+    <form @submit.prevent="createBook" class="book-form">
+      <fieldset>
+        <h3>Adicionar novo livro</h3>
+
+        <label>
+          Título:
+          <input v-model="newBook.title" required />
+        </label>
+
+        <label>
+          Autor:
+          <input v-model="newBook.author" required />
+        </label>
+
+        <label>
+          Ano:
+          <input v-model.number="newBook.year" type="number" required />
+        </label>
+
+        <label>
+          URL da imagem:
+          <input v-model="newBook.imageUrl" placeholder="https://..." />
+        </label>
+
+        <div v-if="newBook.imageUrl" class="image-preview">
+          <img :src="newBook.imageUrl" alt="Prévia da imagem" />
+        </div>
+
+        <button type="submit">Adicionar</button>
+      </fieldset>
     </form>
 
-    <ul>
+    <ul class="book-list">
       <li v-for="book in books" :key="book.id">
-        {{ book.title }} - {{ book.author }} ({{ book.year }})
-        <button @click="editBook(book)">Editar</button>
-        <button @click="deleteBook(book.id)">Excluir</button>
+        <div>
+          <strong>{{ book.title }}</strong> - {{ book.author }} ({{ book.year }})
+        </div>
+        <div class="actions">
+          <button @click="editBook(book)">Editar</button>
+          <button @click="deleteBook(book.id)">Excluir</button>
+        </div>
       </li>
     </ul>
 
-    <div v-if="editingBook">
-      <h3>Editando livro</h3>
+    <div v-if="editingBook" class="edit-form">
+      <h3>Editando livro: {{ editingBook.title }}</h3>
       <form @submit.prevent="updateBook">
-        <input v-model="editingBook.title" />
-        <input v-model="editingBook.author" />
-        <input v-model.number="editingBook.year" />
-        <input v-model="editingBook.imageUrl" placeholder="Link da imagem (opcional)" />
+        <label>
+          Título:
+          <input v-model="editingBook.title" />
+        </label>
+
+        <label>
+          Autor:
+          <input v-model="editingBook.author" />
+        </label>
+
+        <label>
+          Ano:
+          <input v-model.number="editingBook.year" type="number" />
+        </label>
+
+        <label>
+          URL da imagem:
+          <input v-model="editingBook.imageUrl" />
+        </label>
+
+        <div v-if="editingBook.imageUrl" class="image-preview">
+          <img :src="editingBook.imageUrl" alt="Prévia da imagem" />
+        </div>
+
         <button type="submit">Salvar</button>
-        <button @click="editingBook = null">Cancelar</button>
+        <button type="button" @click="editingBook = null">Cancelar</button>
       </form>
     </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.book-form,
+.edit-form {
+  background-color: #1e1e1e;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.book-form fieldset {
+  border: none;
+  padding: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.image-preview img {
+  margin-top: 10px;
+  max-width: 150px;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+}
+
+.book-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.actions button {
+  margin-left: 8px;
+}
+</style>
+
 
 <script setup>
 import { ref, onMounted } from 'vue'
