@@ -7,7 +7,7 @@ Um site de avaliação de livros com frontend Vue.js, backend dotnet core, auten
 ### 🚀 **Funcionalidades**  
 
 - ✅ Autenticação de Usuários (Login/Registro com JWT & PostgreSQL)  
-- ✅ Sistema para adicionar livros favoritos do usuário 
+- ✅ Sistema para usuários comentarem sobre os livros 
 - ✅ API Segura (dotnet core + PostgreSQL)  
 - ✅ Sistema de gerenciamento de avaliação de livro com nota e comentário
 - ✅ Sistema de cargos de adminstração com funções de remover comentário e editar livros
